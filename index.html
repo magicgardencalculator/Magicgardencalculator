@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magic Garden Calculator</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --panel: #0b1220;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --brand: #60a5fa;
+      --brand-2: #a78bfa;
+      --accent: #34d399;
+      --danger: #f43f5e;
+      --warning: #f59e0b;
+      --pill: #111827;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+    [data-theme="light"] {
+      --bg: #f0f6ff;
+      --bg-soft: #e9f0ff;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --brand: #2563eb;
+      --brand-2: #7c3aed;
+      --accent: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --pill: #f8fafc;
+      --border: rgba(2,6,23,0.08);
+      --shadow: 0 10px 25px rgba(2,6,23,0.12);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 0% 0%, rgba(96,165,250,0.12), transparent 60%),
+        radial-gradient(1200px 600px at 100% 0%, rgba(167,139,250,0.12), transparent 60%),
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
+      min-height: 100vh;
+    }
+    .app-shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: saturate(1.4) blur(12px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.0));
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+    .brand img { height: 36px; width: auto; border-radius: 8px; box-shadow: var(--shadow); }
+    .brand .title {
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .spacer { flex: 1; }
+    .toolbar { display: flex; gap: 0.5rem; }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      color: var(--text);
+      padding: 0.45rem 0.7rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset, 0 10px 18px rgba(0,0,0,0.15);
+      font-weight: 600;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.2); }
+    .btn:active { transform: translateY(0); }
+    .btn.primary { border-color: rgba(99,102,241,0.35); background: linear-gradient(180deg, rgba(99,102,241,0.3), rgba(99,102,241,0.12)); }
+    .btn.warn { border-color: rgba(245,158,11,0.35); background: linear-gradient(180deg, rgba(245,158,11,0.25), rgba(245,158,11,0.10)); }
+    .btn.success { border-color: rgba(16,185,129,0.35); background: linear-gradient(180deg, rgba(16,185,129,0.28), rgba(16,185,129,0.10)); }
+
+    .container {
+      max-width: 1100px;
+      margin: 1.2rem auto 2rem;
+      padding: 0 1rem;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1rem;
+    }
+    @media (max-width: 980px) {
+      .container { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+    .hero img { width: 100%; border-radius: 16px; box-shadow: var(--shadow); }
+    h1 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.4px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    p.lead { margin: 0.25rem 0 0 0; color: var(--muted); }
+    .grid { display: grid; gap: 0.75rem; }
+    .two { grid-template-columns: 1fr 1fr; }
+    .three { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 780px) { .two, .three { grid-template-columns: 1fr; } }
+
+    label { font-size: 0.9rem; color: var(--muted); font-weight: 700; }
+    select, input[type="number"], input[type="range"], input[type="text"] {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      background: var(--pill);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    select:focus, input:focus { border-color: rgba(99,102,241,0.45); box-shadow: 0 0 0 3px rgba(99,102,241,0.20); }
+
+    .size-row { display: flex; align-items: center; gap: 0.75rem; }
+    .size-badge { min-width: 44px; text-align: center; padding: 0.35rem 0.5rem; border-radius: 10px; border: 1px dashed var(--border); color: var(--brand); font-weight: 800; }
+    input[type="range"].slider { height: 10px; border-radius: 999px; background: linear-gradient(90deg, var(--brand), var(--brand-2)); outline: none; -webkit-appearance: none; appearance: none; }
+    input[type="range"].slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: white; border: 2px solid var(--brand); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+    input[type="range"].slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: white; border: 2px solid var(--brand); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+
+    .mut-cards { display: grid; gap: 0.75rem; }
+    .mut-card { border: 1px solid var(--border); border-radius: 14px; padding: 0.75rem; background: linear-gradient(180deg, rgba(16,185,129,0.08), rgba(16,185,129,0.03)); }
+    .mut-title { margin: 0 0 0.5rem 0; font-size: 1.05rem; color: var(--accent); }
+    .mut-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .pill { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.65rem; border-radius: 999px; border: 1px solid var(--border); background: var(--pill); cursor: pointer; transition: transform 0.12s ease, border-color 0.2s ease, background 0.2s; user-select: none; }
+.pill, .pill span {
+      /* Ensure text inside pill buttons is readable on both light and dark themes */
+      color: var(--text);
+    }
+    /* Use the brand color for checkbox accents to improve contrast */
+    input[type="checkbox"] {
+      accent-color: var(--brand);
+    }
+    .pill:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); }
+    .pill.active { background: linear-gradient(90deg, rgba(99,102,241,0.30), rgba(99,102,241,0.15)); border-color: rgba(99,102,241,0.45); }
+    .pill input { pointer-events: none; }
+    .pill .emoji { font-size: 1rem; }
+
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 680px) { .stats { grid-template-columns: 1fr; } }
+    .stat { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); padding: 0.75rem; border: 1px solid var(--border); border-radius: 14px; }
+    .stat small { color: var(--muted); font-weight: 700; }
+    .stat .value { font-size: 1.4rem; font-weight: 800; letter-spacing: 0.3px; }
+
+    .result { font-size: 2rem; font-weight: 900; letter-spacing: 0.4px; color: var(--accent); margin-top: 0.5rem; }
+    .friend-result { font-size: 1.2rem; font-weight: 800; color: var(--brand); }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+    /* Gauge styles for visualizing size progress */
+    .gauge {
+      --size: 120px;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: conic-gradient(var(--brand) 0% var(--progress), var(--panel) var(--progress) 100%);
+      position: relative;
+      margin-top: 1rem;
+    }
+    .gauge::before {
+      content: "";
+      position: absolute;
+      top: 14%;
+      left: 14%;
+      right: 14%;
+      bottom: 14%;
+      background: var(--bg);
+      border-radius: 50%;
+    }
+    .gauge-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text);
+    }
+
+    @media (max-width: 680px) {
+      .gauge {
+        --size: 90px;
+      }
+    }
+
+    /* Distinct backgrounds for mutation categories */
+    .mut-card.global { background: linear-gradient(180deg, rgba(99,102,241,0.15), rgba(99,102,241,0.08)); }
+    .mut-card.weather { background: linear-gradient(180deg, rgba(56,189,248,0.15), rgba(56,189,248,0.08)); }
+    .mut-card.harvest { background: linear-gradient(180deg, rgba(245,158,11,0.20), rgba(245,158,11,0.08)); }
+
+    .footer { text-align: center; color: var(--muted); padding: 1.25rem 1rem; border-top: 1px solid var(--border); }
+
+    @keyframes popIn { 0% { transform: translateY(6px) scale(0.98); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+    .animate-in { animation: popIn 420ms ease both; }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="root-theme" data-theme="dark">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" aria-label="Magic Garden Calculator">
+          <img src="header.png" alt="Farm landscape" />
+          <span class="title">Magic Garden Calculator</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="toolbar">
+          <button id="theme-toggle" class="btn" aria-label="Toggle theme" title="Toggle light/dark">🌙</button>
+          <button id="copy-link" class="btn" aria-label="Copy share link" title="Copy share link">🔗 Copy Link</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <section class="hero panel animate-in">
+        <div>
+          <h1>Plan the perfect harvest</h1>
+          <p class="lead">Explore crop sizes, stack mutations, and maximize your coins with live feedback, beautiful visuals, and delightful interactions.</p>
+          <div class="actions" style="margin-top:0.75rem;">
+            <button class="btn primary" id="randomize-btn" title="Randomize all inputs">✨ Randomize</button>
+            <button class="btn warn" id="reset-btn" title="Reset all inputs">↺ Reset</button>
+          </div>
+        </div>
+        <img src="header.png" alt="Illustrated farm landscape with vegetables" />
+      </section>
+
+      <section class="panel animate-in" style="animation-delay:60ms;">
+        <div id="app"></div>
+      </section>
+
+      <!-- Replaced chart with a descriptive panel to explain how the calculator works -->
+      <section class="panel animate-in" style="animation-delay:120ms;">
+        <h2 style="margin:0 0 0.5rem 0;font-size:1.3rem;font-weight:700;background:linear-gradient(90deg, var(--brand), var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;">
+          How the calculator works
+        </h2>
+        <p class="lead" style="margin:0 0 0.5rem 0;">
+          Adjust the crop type, size, mutations and number of players to see how your harvest scales. The weight of your crop increases linearly from the base to its maximum as you slide the size from 50&nbsp;to&nbsp;100. Each mutation multiplies your crop’s value, while inviting friends adds a 10% bonus per extra player.
+        </p>
+        <p class="lead" style="margin:0;">
+          When you max out the size or pick a dominant mutation like <strong>Gold</strong> or <strong>Rainbow</strong>, we’ll celebrate with confetti! Share your customized harvest with friends using the copy link button above.
+        </p>
+        <!-- Friendly lil' guy and comment bubble -->
+        <div id="lil-container" style="display:flex;align-items:flex-start;gap:1rem;margin-top:1rem;">
+          <!-- The lil' guy mascot sits beside the comment bubble. The image has a fixed max width so it scales nicely on smaller screens. -->
+          <img id="lil-guy" src="lilguy.png" alt="Lil Guy mascot" style="width:140px;max-width:30%;height:auto;border-radius:12px;box-shadow:var(--shadow);" />
+          <!-- Comment bubble where dynamic crop tips will appear -->
+          <div id="lil-comment" style="flex:1;padding:0.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:12px;color:var(--text);line-height:1.4;font-size:0.95rem;">
+            Select a crop to see what lil' guy has to say!
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">Made with ❤️ — tweak, share, and enjoy your harvest planning.</footer>
+  </div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const mutationList = [
+      { id: 'gold', label: 'Gold', emoji: '🪙', value: 25, dominant: true, exclusiveWith: ['rainbow'] },
+      { id: 'rainbow', label: 'Rainbow', emoji: '🌈', value: 50, dominant: true, exclusiveWith: ['gold'] },
+      { id: 'frozen', label: 'Frozen', emoji: '❄️', value: 10, exclusiveWith: ['wet', 'chilled'] },
+      { id: 'wet', label: 'Wet', emoji: '💧', value: 2, exclusiveWith: ['frozen', 'chilled'] },
+      { id: 'chilled', label: 'Chilled', emoji: '🥶', value: 2, exclusiveWith: ['frozen', 'wet'] },
+      { id: 'dawnlit', label: 'Dawnlit', emoji: '🌅', value: 2, exclusiveWith: ['ambershine'] },
+      { id: 'ambershine', label: 'Ambershine', emoji: '🟧', value: 5, exclusiveWith: ['dawnlit'] },
+    ];
+
+    const friendOptions = [1, 2, 3, 4, 5, 6];
+
+    const produceList = [
+      { id: 'carrot',       label: 'Carrot',        emoji: '🥕', basePrice: 18,       baseWeight: 0.100, maxWeight: 0.300 },
+      { id: 'strawberry',   label: 'Strawberry',    emoji: '🍓', basePrice: 14,       baseWeight: 0.050, maxWeight: 0.100 },
+      { id: 'aloe',         label: 'Aloe',          emoji: '🪴', basePrice: 310,      baseWeight: 1.5,   maxWeight: 3.8   },
+      { id: 'blueberry',    label: 'Blueberry',     emoji: '🫐', basePrice: 23,       baseWeight: 0.010, maxWeight: 0.020 },
+      { id: 'apple',        label: 'Apple',         emoji: '🍎', basePrice: 73,       baseWeight: 0.180, maxWeight: 0.360 },
+      { id: 'tulip',        label: 'Tulip',         emoji: '🌷', basePrice: 767,      baseWeight: 0.010, maxWeight: 0.030 },
+      { id: 'tomato',       label: 'Tomato',        emoji: '🍅', basePrice: 27,       baseWeight: 0.300, maxWeight: 0.600 },
+      { id: 'daffodil',     label: 'Daffodil',      emoji: '🌼', basePrice: 1090,     baseWeight: 0.010, maxWeight: 0.030 },
+      { id: 'corn',         label: 'Corn',          emoji: '🌽', basePrice: 36,       baseWeight: 1.20,  maxWeight: 2.40  },
+      { id: 'watermelon',   label: 'Watermelon',    emoji: '🍉', basePrice: 2708,     baseWeight: 4.50,  maxWeight: 13.50 },
+      { id: 'pumpkin',      label: 'Pumpkin',       emoji: '🎃', basePrice: 3700,     baseWeight: 6.00,  maxWeight: 18.00 },
+      { id: 'echeveria',    label: 'Echeveria',     emoji: '🌿', basePrice: 5520,     baseWeight: 0.80,  maxWeight: 2.20 },
+      { id: 'coconut',      label: 'Coconut',       emoji: '🥥', basePrice: 302,      baseWeight: 5.00,  maxWeight: 15.00 },
+      { id: 'banana',       label: 'Banana',        emoji: '🍌', basePrice: 1750,     baseWeight: 0.120, maxWeight: 0.204 },
+      { id: 'lily',         label: 'Lily',          emoji: '🌸', basePrice: 20123,    baseWeight: 0.0200, maxWeight: 0.0550 },
+      { id: 'burro',        label: "Burro's Tail", emoji: '🌵', basePrice: 6000,     baseWeight: 0.40,  maxWeight: 1.0  },
+      { id: 'mushroom',     label: 'Mushroom',      emoji: '🍄', basePrice: 160000,   baseWeight: 25.00, maxWeight: 87.50 },
+      { id: 'cactus',       label: 'Cactus',        emoji: '🌵', basePrice: 287000,   baseWeight: 1500,  maxWeight: 2700  },
+      { id: 'bamboo',       label: 'Bamboo',        emoji: '🎍', basePrice: 500000,   baseWeight: 1.00,  maxWeight: 2.00 },
+      { id: 'grape',        label: 'Grape',         emoji: '🍇', basePrice: 7085,     baseWeight: 3.00,  maxWeight: 6.00  },
+      { id: 'pepper',       label: 'Pepper',        emoji: '🌶️', basePrice: 7220,     baseWeight: 0.500, maxWeight: 1.000 },
+      { id: 'lemon',        label: 'Lemon',         emoji: '🍋', basePrice: 10000,    baseWeight: 0.500, maxWeight: 1.500 },
+      { id: 'passionfruit', label: 'Passion Fruit', emoji: '🥭', basePrice: 24500,    baseWeight: 9.50,  maxWeight: 19.00 },
+      { id: 'dragonfruit',  label: 'Dragon Fruit',  emoji: '🐉', basePrice: 24500,    baseWeight: 8.40,  maxWeight: 16.80 },
+      { id: 'lychee',       label: 'Lychee',        emoji: '🍒', basePrice: 50000,    baseWeight: 9.00,  maxWeight: 18.00 },
+      { id: 'sunflower',    label: 'Sunflower',     emoji: '🌻', basePrice: 750000,   baseWeight: 10.00, maxWeight: 25.00 },
+      { id: 'starweaver',   label: 'Starweaver',    emoji: '⭐️', basePrice: 10000000, baseWeight: 10.00, maxWeight: 20.00 },
+      { id: 'custom',       label: 'Custom',        emoji: '✨', basePrice: 0,        baseWeight: 10,    maxWeight: 20     }
+    ];
+
+    function useAnimatedNumber(value) {
+      const [display, setDisplay] = React.useState(value);
+      const rafRef = React.useRef(null);
+      React.useEffect(() => {
+        const start = performance.now();
+        const from = display;
+        const to = value;
+        const duration = 420;
+        function step(now) {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+          const current = Math.round(from + (to - from) * eased);
+          setDisplay(current);
+          if (t < 1) rafRef.current = requestAnimationFrame(step);
+        }
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(rafRef.current);
+      }, [value]);
+      return display;
+    }
+
+    function serializeState(state) {
+      const params = new URLSearchParams();
+      params.set('crop', state.selectedCrop);
+      params.set('size', String(state.size));
+      params.set('mut', state.selectedMutations.join(','));
+      params.set('p', String(state.playersCount));
+      if (state.selectedCrop === 'custom') {
+        params.set('bp', String(state.customPrice));
+        params.set('bw', String(state.customBaseWeight));
+        params.set('mw', String(state.customMaxWeight));
+      }
+      return params.toString();
+    }
+
+    function parseState() {
+      const p = new URLSearchParams(location.search);
+      const crop = p.get('crop');
+      const size = Number(p.get('size')) || 50;
+      const mut = (p.get('mut') || '').split(',').filter(Boolean);
+      const players = Number(p.get('p')) || 1;
+      const bp = Number(p.get('bp')) || 100000;
+      const bw = Number(p.get('bw')) || 10;
+      const mw = Number(p.get('mw')) || 20;
+      return { crop, size, mut, players, bp, bw, mw };
+    }
+
+    function fireConfetti() {
+      // Confetti effect has been disabled for a calmer experience.
+    }
+
+    function MutationCalculator() {
+      const [selectedCrop, setSelectedCrop] = React.useState(produceList[0].id);
+      const [size, setSize] = React.useState(50);
+      const [selectedMutations, setSelectedMutations] = React.useState([]);
+      const [customPrice, setCustomPrice] = React.useState(100000);
+      const [customBaseWeight, setCustomBaseWeight] = React.useState(10);
+      const [customMaxWeight, setCustomMaxWeight] = React.useState(20);
+      const [playersCount, setPlayersCount] = React.useState(1);
+
+      React.useEffect(() => {
+        const s = parseState();
+        if (s.crop && produceList.find(p => p.id === s.crop)) setSelectedCrop(s.crop);
+        if (s.size) setSize(Math.max(50, Math.min(100, s.size)));
+        if (s.mut.length) setSelectedMutations(s.mut.filter(id => mutationList.find(m => m.id === id)));
+        if (s.players) setPlayersCount(Math.max(1, Math.min(6, s.players)));
+        if (s.crop === 'custom') {
+          setCustomPrice(s.bp);
+          setCustomBaseWeight(s.bw);
+          setCustomMaxWeight(s.mw);
+        }
+      }, []);
+
+      React.useEffect(() => {
+        const query = serializeState({ selectedCrop, size, selectedMutations, playersCount, customPrice, customBaseWeight, customMaxWeight });
+        const newUrl = `${location.pathname}?${query}`;
+        window.history.replaceState(null, '', newUrl);
+      }, [selectedCrop, size, selectedMutations, playersCount, customPrice, customBaseWeight, customMaxWeight]);
+
+      React.useEffect(() => {
+        const crop = produceList.find(p => p.id === selectedCrop);
+        if (crop && crop.id !== 'custom') setSize(50);
+      }, [selectedCrop]);
+
+      function toggleMutation(id) {
+        const isSelected = selectedMutations.includes(id);
+        if (isSelected) {
+          setSelectedMutations(selectedMutations.filter(m => m !== id));
+        } else {
+          const mut = mutationList.find(m => m.id === id);
+          const updated = selectedMutations.filter(mId => {
+            const existing = mutationList.find(x => x.id === mId);
+            const existingConflicts = existing.exclusiveWith || [];
+            const newConflicts = mut.exclusiveWith || [];
+            return (!existingConflicts.includes(id) && !newConflicts.includes(mId));
+          });
+          updated.push(id);
+          setSelectedMutations(updated);
+        }
+      }
+
+      function computeCoins(scale, basePrice) {
+        const chosen = selectedMutations.map(id => mutationList.find(m => m.id === id));
+        const dominant = chosen.find(m => m && m.dominant);
+        const dominantValue = dominant ? dominant.value : 1;
+        const others = chosen.filter(m => m && !m.dominant);
+        const sumValues = others.reduce((acc, m) => acc + m.value, 0);
+        const count = others.length;
+        const bracket = 1 + sumValues - count;
+        const multiplier = dominantValue * bracket;
+        return Math.round(basePrice * scale * multiplier);
+      }
+
+      const crop = produceList.find(p => p.id === selectedCrop);
+      let basePriceV = 0; let baseWt = 1; let maxWt = 1;
+      if (crop) {
+        if (crop.id === 'custom') {
+          basePriceV = Number(customPrice) || 0;
+          baseWt = Number(customBaseWeight) || 1;
+          maxWt = Number(customMaxWeight) || baseWt;
+        } else {
+          basePriceV = crop.basePrice; baseWt = crop.baseWeight; maxWt = crop.maxWeight;
+        }
+      }
+      const sizeNum = Number(size) || 50;
+      const clampedSize = Math.min(100, Math.max(50, sizeNum));
+      let currentWeight = baseWt + (maxWt - baseWt) * ((clampedSize - 50) / 50);
+      if (currentWeight < baseWt) currentWeight = baseWt;
+      if (currentWeight > maxWt) currentWeight = maxWt;
+      const scale = baseWt > 0 ? currentWeight / baseWt : 0;
+      const coins = computeCoins(scale, basePriceV);
+
+      let roundedWeight;
+      if (currentWeight >= 10) {
+        roundedWeight = Math.round(currentWeight);
+      } else if (currentWeight >= 1) {
+        roundedWeight = Math.round(currentWeight * 10) / 10;
+      } else {
+        roundedWeight = Math.round(currentWeight * 100) / 100;
+      }
+      const friendMultiplier = 1 + 0.1 * (Math.max(1, playersCount) - 1);
+      const coinsWithFriendBonus = Math.round(coins * friendMultiplier);
+
+      const animatedCoins = useAnimatedNumber(coins);
+      const animatedFriendCoins = useAnimatedNumber(coinsWithFriendBonus);
+
+      React.useEffect(() => {
+        if (clampedSize === 100 || selectedMutations.includes('gold') || selectedMutations.includes('rainbow')) fireConfetti();
+      }, [clampedSize, selectedMutations]);
+
+      function resetAll() {
+        setSelectedCrop(produceList[0].id);
+        setSize(50);
+        setSelectedMutations([]);
+        setPlayersCount(1);
+        setCustomPrice(100000);
+        setCustomBaseWeight(10);
+        setCustomMaxWeight(20);
+      }
+
+      function randomize() {
+        const crops = produceList.map(p => p.id);
+        const cropId = crops[Math.floor(Math.random() * crops.length)];
+        setSelectedCrop(cropId);
+        setSize(50 + Math.floor(Math.random() * 51));
+        const shuffled = [...mutationList].sort(() => Math.random() - 0.5);
+        let chosen = [];
+        for (const m of shuffled) {
+          const conflicts = m.exclusiveWith || [];
+          if (!chosen.some(x => conflicts.includes(x)) && Math.random() < 0.5) chosen.push(m.id);
+        }
+        if (chosen.includes('gold') && chosen.includes('rainbow')) chosen = chosen.filter(x => x !== (Math.random() < 0.5 ? 'gold' : 'rainbow'));
+        setSelectedMutations(chosen);
+        setPlayersCount(1 + Math.floor(Math.random() * 6));
+        if (cropId === 'custom') {
+          setCustomPrice(10000 + Math.floor(Math.random() * 900000));
+          setCustomBaseWeight(1 + Math.floor(Math.random() * 20));
+          setCustomMaxWeight(20 + Math.floor(Math.random() * 80));
+        }
+      }
+
+      React.useEffect(() => {
+        const resetBtn = document.getElementById('reset-btn');
+        const randomBtn = document.getElementById('randomize-btn');
+        resetBtn.onclick = resetAll;
+        randomBtn.onclick = randomize;
+        const copyBtn = document.getElementById('copy-link');
+        copyBtn.onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(location.href);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '🔗 Copy Link', 1200);
+          } catch {
+            alert('Copy failed. You can manually copy the URL.');
+          }
+        };
+      }, []);
+
+      const globalMutations = mutationList.filter(m => m.dominant);
+      const weatherMutations = mutationList.filter(m => ['wet', 'chilled', 'frozen'].includes(m.id));
+      const harvestMutations = mutationList.filter(m => ['dawnlit', 'ambershine'].includes(m.id));
+
+      return (
+        <div className="grid" role="region" aria-label="Calculator">
+          <div className="grid two">
+            <div>
+              <label htmlFor="crop-select" title="Choose your crop">Crop</label>
+              <select
+                id="crop-select"
+                value={selectedCrop}
+                onChange={e => setSelectedCrop(e.target.value)}
+                aria-label="Select crop"
+              >
+                {produceList.map(crop => (
+                  <option key={crop.id} value={crop.id}>
+                    {crop.emoji} {crop.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="players-select" title="1 to 6 players">Players</label>
+              <select
+                id="players-select"
+                value={playersCount}
+                onChange={e => setPlayersCount(Number(e.target.value))}
+                aria-label="Select number of players"
+              >
+                {friendOptions.map(n => (
+                  <option key={n} value={n}>
+                    {n} player{n > 1 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {selectedCrop === 'custom' && (
+            <div className="grid three" role="group" aria-label="Custom crop fields">
+              <div>
+                <label htmlFor="custom-price">Base price</label>
+                <input id="custom-price" type="number" min="0" value={customPrice} onChange={e => setCustomPrice(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor="custom-baseWt">Base weight (kg)</label>
+                <input id="custom-baseWt" type="number" min="0.1" step="0.1" value={customBaseWeight} onChange={e => setCustomBaseWeight(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor="custom-maxWeight">Max weight (kg)</label>
+                <input id="custom-maxWeight" type="number" min="0.1" step="0.1" value={customMaxWeight} onChange={e => setCustomMaxWeight(e.target.value)} />
+              </div>
+            </div>
+          )}
+
+          <div>
+            <label htmlFor="size-slider">Size</label>
+            <div className="size-row">
+              <input
+                id="size-slider"
+                type="range"
+                className="slider"
+                min="50"
+                max="100"
+                step="1"
+                value={size}
+                onChange={e => setSize(Number(e.target.value))}
+                aria-valuemin={50}
+                aria-valuemax={100}
+                aria-valuenow={size}
+              />
+              <div className="size-badge" aria-live="polite">{size}</div>
+            </div>
+          </div>
+
+          <div className="stats" role="region" aria-label="Weights">
+            <div className="stat">
+              <small>Base weight</small>
+              <div className="value">{baseWt} kg</div>
+            </div>
+            <div className="stat">
+              <small>Current → Max</small>
+              <div className="value">{currentWeight.toFixed(2)} → {maxWt} kg</div>
+            </div>
+          </div>
+
+          <div className="mut-cards" role="region" aria-label="Mutations">
+            <div className="mut-card global">
+              <h3 className="mut-title">Global mutations</h3>
+              <div className="mut-group">
+                {globalMutations.map(mut => {
+                  const isChecked = selectedMutations.includes(mut.id);
+                  return (
+                    <button
+                      key={mut.id}
+                      className={"pill" + (isChecked ? " active" : "")}
+                      onClick={() => toggleMutation(mut.id)}
+                      aria-pressed={isChecked}
+                      title={`${mut.emoji} ${mut.label} (×${mut.value})`}
+                    >
+                      <span className="emoji" aria-hidden="true">{mut.emoji}</span>
+                      <input type="checkbox" readOnly checked={isChecked} />
+                      <span>{mut.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mut-card weather">
+              <h3 className="mut-title">Weather mutations</h3>
+              <div className="mut-group">
+                {weatherMutations.map(mut => {
+                  const isChecked = selectedMutations.includes(mut.id);
+                  return (
+                    <button
+                      key={mut.id}
+                      className={"pill" + (isChecked ? " active" : "")}
+                      onClick={() => toggleMutation(mut.id)}
+                      aria-pressed={isChecked}
+                      title={`${mut.emoji} ${mut.label} (×${mut.value})`}
+                    >
+                      <span className="emoji" aria-hidden="true">{mut.emoji}</span>
+                      <input type="checkbox" readOnly checked={isChecked} />
+                      <span>{mut.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mut-card harvest">
+              <h3 className="mut-title">Harvest & Dawn</h3>
+              <div className="mut-group">
+                {harvestMutations.map(mut => {
+                  const isChecked = selectedMutations.includes(mut.id);
+                  return (
+                    <button
+                      key={mut.id}
+                      className={"pill" + (isChecked ? " active" : "")}
+                      onClick={() => toggleMutation(mut.id)}
+                      aria-pressed={isChecked}
+                      title={`${mut.emoji} ${mut.label} (×${mut.value})`}
+                    >
+                      <span className="emoji" aria-hidden="true">{mut.emoji}</span>
+                      <input type="checkbox" readOnly checked={isChecked} />
+                      <span>{mut.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="result" aria-live="polite">
+              Estimated coins: {animatedCoins.toLocaleString()}
+            </div>
+            {playersCount > 1 && (
+              <div className="friend-result">
+                With friend bonus: {animatedFriendCoins.toLocaleString()}
+              </div>
+            )}
+            <div
+              className="gauge"
+              style={{ '--progress': `${(clampedSize - 50) * 2}%` }}
+            >
+              <div className="gauge-text">{clampedSize}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [theme, setTheme] = React.useState('dark');
+      React.useEffect(() => {
+        const saved = localStorage.getItem('theme');
+        if (saved) setTheme(saved);
+      }, []);
+      React.useEffect(() => {
+        const root = document.getElementById('root-theme');
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        const btn = document.getElementById('theme-toggle');
+        btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+      }, [theme]);
+
+      React.useEffect(() => {
+        const btn = document.getElementById('theme-toggle');
+        btn.onclick = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
+      }, []);
+
+      return <MutationCalculator />;
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+
+  <!-- Script to power the lil' guy comments. This runs after the page has loaded and uses the
+       existing produceList defined above to craft crop-specific tips. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const commentBox = document.getElementById('lil-comment');
+      if (!commentBox) return;
+
+      // Predefined fun comments for specific crops
+      const commentsMap = {
+        carrot: [
+          'Carrots may be small, but they pack a sweet reward!',
+          'Try stacking Gold mutation to double your carrot coins!',
+          'Crunchy and classic! Dawnlit will make carrots glow with the sunrise.'
+        ],
+        coconut: [
+          'Coconuts have a hard shell but deliver tropical profits.',
+          'Wet or Frozen mutations keep coconuts cool for extra value.',
+          'These hefty nuts love friends — invite players for a 10% boost each!'
+        ],
+        sunflower: [
+          'Sunflowers love to soak up the sun – grow them big!',
+          'Pair with Dawnlit or Ambershine for extra shine and profits.',
+          'Gold mutation makes sunflowers sparkle almost as bright as the sun.'
+        ],
+        starweaver: [
+          'The legendary Starweaver! Combine it with Ambershine for cosmic returns.',
+          'Rainbow mutation makes Starweavers sparkle even more!',
+          'A rare starry crop. Max its size and invite friends for astronomical rewards!'
+        ]
+      };
+
+      // Generate two generic comments for any crop using its data
+      function genericComments(crop) {
+        if (!crop) return [];
+        return [
+          `A ${crop.label} ranges from ${crop.baseWeight}–${crop.maxWeight} kg. That’s quite the size difference!`,
+          `Base price: ${crop.basePrice} coins. Try combining with Gold or Rainbow for extra value!`,
+          `Invite friends for a 10% bonus per player when harvesting ${crop.label}.`
+        ];
+      }
+
+      // Determine the list of comments for a given crop id
+      function getCommentList(id) {
+        let list = commentsMap[id];
+        // If no specific comments are defined, build generic ones from produceList
+        if (!list && typeof produceList !== 'undefined') {
+          const crop = produceList.find(item => item.id === id);
+          list = genericComments(crop);
+        }
+        return list || [];
+      }
+
+      function updateComment() {
+        let selectedId = null;
+        // Inspect all select elements; the crop select is the one whose value matches an entry in produceList
+        const selects = document.querySelectorAll('select');
+        selects.forEach(sel => {
+          const value = sel.value;
+          if (typeof produceList !== 'undefined' && produceList.some(item => item.id === value)) {
+            selectedId = value;
+          }
+        });
+        // Default to first crop if nothing found
+        if (!selectedId && typeof produceList !== 'undefined') {
+          selectedId = produceList[0].id;
+        }
+        const commentList = getCommentList(selectedId);
+        if (commentList.length > 0) {
+          const idx = Math.floor(Math.random() * commentList.length);
+          commentBox.textContent = commentList[idx];
+        } else {
+          commentBox.textContent = 'Select a crop to see helpful tips!';
+        }
+      }
+
+      // Initialize a comment when the page loads
+      updateComment();
+
+      // Recalculate comment whenever any select changes (crop, players, etc.)
+      document.addEventListener('change', function (e) {
+        if (e.target.tagName.toLowerCase() === 'select') {
+          updateComment();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
