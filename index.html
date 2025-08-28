@@ -122,6 +122,7 @@
       border-radius: 16px;
       padding: 1rem;
       box-shadow: var(--shadow);
+      overflow: hidden; /* contain decorations */
     }
     .hero {
       grid-column: 1 / -1;
@@ -165,6 +166,7 @@
     input[type="range"].slider { height: 10px; border-radius: 999px; background: linear-gradient(90deg, var(--brand), var(--brand-2)); outline: none; -webkit-appearance: none; appearance: none; }
     input[type="range"].slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: white; border: 2px solid var(--brand); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
     input[type="range"].slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: white; border: 2px solid var(--brand); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+    input[type="range"].slider.disabled { filter: grayscale(1); opacity: 0.6; transition: opacity 0.2s ease, filter 0.2s ease; }
 
     .mut-cards { display: grid; gap: 0.75rem; }
     .mut-card { border: 1px solid var(--border); border-radius: 14px; padding: 0.75rem; background: linear-gradient(180deg, rgba(16,185,129,0.08), rgba(16,185,129,0.03)); }
@@ -183,6 +185,7 @@
     .pill.active { background: linear-gradient(90deg, rgba(99,102,241,0.30), rgba(99,102,241,0.15)); border-color: rgba(99,102,241,0.45); }
     .pill input { pointer-events: none; }
     .pill .emoji { font-size: 1rem; }
+    .pill.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
     /* Seed to Profits Toggle Styles */
     .profit-toggle-container {
@@ -255,6 +258,17 @@
       color: var(--accent);
     }
 
+    /* Cart Styles */
+    .cart-panel { margin-top: 0.5rem; border: 1px solid var(--border); border-radius: 16px; padding: 0.75rem; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); }
+    .cart-title { margin: 0 0 0.5rem 0; font-size: 1.0rem; font-weight: 800; color: var(--brand); }
+    .cart-add { display: grid; grid-template-columns: 1.4fr 0.8fr auto; gap: 0.5rem; align-items: end; }
+    .cart { display: grid; gap: 0.5rem; margin-top: 0.6rem; }
+    .cart-item { display: grid; grid-template-columns: 1fr auto auto; gap: 0.5rem; align-items: center; border: 1px solid var(--border); border-radius: 12px; padding: 0.5rem 0.6rem; background: var(--pill); }
+    .cart-label { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; }
+    .qty { width: 72px; }
+    .remove-btn { border: 1px solid rgba(239,68,68,0.35); background: linear-gradient(180deg, rgba(239,68,68,0.25), rgba(239,68,68,0.10)); color: var(--text); padding: 0.35rem 0.55rem; border-radius: 10px; cursor: pointer; }
+    .remove-btn:hover { transform: translateY(-1px); border-color: rgba(239,68,68,0.6); }
+
     /* Profit Display Styles */
     .profit-positive {
       color: var(--accent);
@@ -286,6 +300,79 @@
       font-weight: 800;
     }
 
+    /* Custom Dropdown (always opens downward) */
+    .dd { position: relative; }
+    .dd-btn {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      background: var(--pill);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      text-align: left;
+      cursor: pointer;
+    }
+    .dd-btn:focus { border-color: rgba(99,102,241,0.45); box-shadow: 0 0 0 3px rgba(99,102,241,0.20); }
+    .dd-btn .dd-value { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .dd-btn .dd-caret { float: right; opacity: 0.6; }
+    .dd-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      max-height: 280px;
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 20;
+    }
+    .dd-item { padding: 0.5rem 0.65rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .dd-item:hover { background: rgba(99,102,241,0.12); }
+    .dd-emoji { width: 1.2rem; display: inline-block; }
+    .dd-price { margin-left: auto; color: var(--muted); font-weight: 700; }
+
+    /* Pet Section Styles */
+    .pet-section {
+      background: linear-gradient(180deg, rgba(147,51,234,0.08), rgba(147,51,234,0.03));
+      border: 1px solid rgba(147,51,234,0.2);
+      border-radius: 16px;
+      padding: 1rem;
+    }
+
+    .pet-section h4 {
+      margin: 0 0 0.75rem 0;
+      color: #a855f7;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .crop-eater-disabled {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .pet-bonus-info {
+      background: rgba(147,51,234,0.1);
+      border: 1px solid rgba(147,51,234,0.3);
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .pet-bonus-info small {
+      color: #a855f7;
+      font-weight: 600;
+    }
+
     .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
     @media (max-width: 980px) { .stats { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 680px) { .stats { grid-template-columns: 1fr; } }
@@ -297,6 +384,69 @@
     .friend-result { font-size: 1.2rem; font-weight: 800; color: var(--brand); }
     .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
+    /* Players panel */
+    .players-panel {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(99,102,241,0.12), rgba(99,102,241,0.05));
+      box-shadow: var(--shadow);
+      width: fit-content;
+    }
+    .players-panel .emoji { font-size: 1rem; }
+    .players-select { min-width: 150px; }
+
+    /* Controls row under profit toggle */
+    .controls-row { display: flex; gap: 0.6rem; align-items: center; justify-content: space-between; margin-top: 0.4rem; }
+
+    /* Lil' guy makeover */
+    .mascot-row { display: flex; align-items: flex-start; gap: 1rem; margin-top: 1rem; }
+    .mascot-img { width: 170px; max-width: 34%; height: auto; border-radius: 16px; box-shadow: 0 22px 34px rgba(0,0,0,0.40), 0 0 0 8px rgba(99,102,241,0.14); animation: floaty 4s ease-in-out infinite, shimmer 2.8s linear infinite; position: relative; }
+    .mascot-img::after { content: ""; position: absolute; inset: -10px; border-radius: 20px; background:
+      radial-gradient(closest-side, rgba(167,139,250,0.45), rgba(96,165,250,0.0)); filter: blur(10px); animation: pulse 2.6s ease-in-out infinite; pointer-events: none; }
+    .speech-bubble { flex: 1; padding: 0.9rem 1rem; background: linear-gradient(180deg, rgba(99,102,241,0.10), rgba(99,102,241,0.04)); border: 1px solid rgba(99,102,241,0.35); border-radius: 14px; color: var(--text); line-height: 1.45; font-size: 0.95rem; box-shadow: 0 14px 24px rgba(0,0,0,0.25); position: relative; }
+    .speech-bubble::after { content: ""; position: absolute; left: -10px; top: 18px; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid rgba(99,102,241,0.35); filter: drop-shadow(0 0 0 rgba(0,0,0,0.2)); }
+    .speech-bubble::before { content: ""; position: absolute; left: -8px; top: 18px; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid rgba(99,102,241,0.10); }
+
+    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes pulse { 0%,100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.04); } }
+    @keyframes shimmer { 0% { filter: saturate(1); } 50% { filter: saturate(1.15) drop-shadow(0 0 10px rgba(99,102,241,0.3)); } 100% { filter: saturate(1); } }
+
+    /* Garden-themed panel decorations */
+    .how-panel { position: relative; background:
+        radial-gradient(1000px 500px at -10% 0%, rgba(34,197,94,0.06), transparent 60%),
+        radial-gradient(900px 520px at 110% 10%, rgba(99,102,241,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); }
+    .how-panel::before { content: ""; position: absolute; inset: 0; background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 8px, transparent 8px 16px);
+        pointer-events: none; }
+    .deco { position: absolute; filter: blur(0.25px); pointer-events: none; opacity: 0.9; }
+    .deco-seed { width: 140px; height: 140px; border-radius: 50%; background:
+        radial-gradient(circle at 30% 30%, rgba(250,204,21,0.25), rgba(250,204,21,0) 60%),
+        radial-gradient(circle at 60% 70%, rgba(34,197,94,0.25), rgba(34,197,94,0) 60%);
+        box-shadow: inset 0 0 40px rgba(0,0,0,0.08);
+        mix-blend-mode: screen; }
+    .deco-leaf { width: 220px; height: 220px; border-radius: 50%; background:
+        conic-gradient(from 180deg at 60% 60%, rgba(34,197,94,0.25), rgba(16,185,129,0.0) 60%),
+        radial-gradient(circle at 35% 35%, rgba(16,185,129,0.20), rgba(16,185,129,0) 55%);
+        transform: rotate(-8deg);
+        mix-blend-mode: screen; }
+    .deco-right { right: -40px; top: -40px; }
+    .deco-left { left: -50px; bottom: -50px; }
+    .grass { position: absolute; left: -2%; right: -2%; bottom: -1px; height: 28px; background:
+        linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 100%),
+        repeating-linear-gradient(95deg, rgba(34,197,94,0.35) 0 6px, rgba(34,197,94,0.20) 6px 12px);
+        border-top: 1px solid rgba(34,197,94,0.22); filter: blur(0.0px); }
+
+    /* Garden tips grid */
+    .tips { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.8rem; }
+    .tip { display: flex; gap: 0.55rem; align-items: flex-start; padding: 0.55rem 0.6rem; border: 1px dashed var(--border); border-radius: 12px; background: linear-gradient(180deg, rgba(34,197,94,0.06), rgba(34,197,94,0.02)); }
+    .tip .dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(180deg, var(--accent), #16a34a); margin-top: 6px; box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+    @media (max-width: 780px) { .tips { grid-template-columns: 1fr; } }
+  
     /* Gauge styles for visualizing size progress */
     .gauge {
       --size: 120px;
@@ -369,10 +519,7 @@
         <div>
           <h1>Plan the perfect harvest</h1>
           <p class="lead">Explore crop sizes, stack mutations, and maximize your coins with live feedback, beautiful visuals, and delightful interactions.</p>
-          <div class="actions" style="margin-top:0.75rem;">
-            <button class="btn primary" id="randomize-btn" title="Randomize all inputs">✨ Randomize</button>
-            <button class="btn warn" id="reset-btn" title="Reset all inputs">↺ Reset</button>
-          </div>
+          
         </div>
         <img src="header.png" alt="Illustrated farm landscape with vegetables" />
       </section>
@@ -382,7 +529,7 @@
       </section>
 
       <!-- Replaced chart with a descriptive panel to explain how the calculator works -->
-      <section class="panel animate-in" style="animation-delay:120ms;">
+      <section class="panel how-panel animate-in" style="animation-delay:120ms;">
         <h2 style="margin:0 0 0.5rem 0;font-size:1.3rem;font-weight:700;background:linear-gradient(90deg, var(--brand), var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;">
           How the calculator works
         </h2>
@@ -393,18 +540,27 @@
           When you max out the size or pick a dominant mutation like <strong>Gold</strong> or <strong>Rainbow</strong>, we’ll celebrate with confetti! Share your customized harvest with friends using the copy link button above.
         </p>
         <!-- Friendly lil' guy and comment bubble -->
-        <div id="lil-container" style="display:flex;align-items:flex-start;gap:1rem;margin-top:1rem;">
-          <!-- The lil' guy mascot sits beside the comment bubble. The image has a fixed max width so it scales nicely on smaller screens. -->
-          <img id="lil-guy" src="lilguy.png" alt="Lil Guy mascot" style="width:140px;max-width:30%;height:auto;border-radius:12px;box-shadow:var(--shadow);" />
-          <!-- Comment bubble where dynamic crop tips will appear -->
-          <div id="lil-comment" style="flex:1;padding:0.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:12px;color:var(--text);line-height:1.4;font-size:0.95rem;">
-            Select a crop to see what lil' guy has to say!
-          </div>
+        <div class="mascot-row">
+          <img id="lil-guy" class="mascot-img" src="lilguy.png" alt="Lil Guy mascot" />
+          <div id="lil-comment" class="speech-bubble">Select a crop to see what lil' guy has to say!</div>
         </div>
+
+        <!-- Garden tips to fill space -->
+        <div class="tips" aria-label="Garden tips">
+          <div class="tip"><div class="dot"></div><div><strong>Sunlight matters:</strong> higher size simulates better growing conditions for bigger yields.</div></div>
+          <div class="tip"><div class="dot"></div><div><strong>Stack smart:</strong> mix non-conflicting mutations to multiply value without lockouts.</div></div>
+          <div class="tip"><div class="dot"></div><div><strong>Invite friends:</strong> each extra player adds a 10% bonus to your coins.</div></div>
+          <div class="tip"><div class="dot"></div><div><strong>Go dominant:</strong> Gold or Rainbow can outshine others—watch the confetti fly.</div></div>
+        </div>
+
+        <!-- Decorative overlays -->
+        <div class="deco deco-leaf deco-right" aria-hidden="true"></div>
+        <div class="deco deco-seed deco-left" aria-hidden="true"></div>
+        <div class="grass" aria-hidden="true"></div>
       </section>
     </main>
 
-    <footer class="footer">Made with ❤️ — tweak, share, and enjoy your harvest planning.</footer>
+    <footer class="footer">Made by LaDaronneA, with ❤️ — tweak, share, and enjoy your harvest planning.</footer>
   </div>
 
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -424,7 +580,16 @@
 
     const friendOptions = [1, 2, 3, 4, 5, 6];
 
+    const petAbilities = [
+      { id: 'none', label: 'No Pet', emoji: '❌' },
+      { id: 'sell_boost_1', label: 'Sell Boost I', emoji: '💰', basePercent: 0.12 },
+      { id: 'sell_boost_2', label: 'Sell Boost II', emoji: '💰', basePercent: 0.24 },
+      { id: 'sell_boost_3', label: 'Sell Boost III', emoji: '💰', basePercent: 0.36 },
+      { id: 'crop_eater', label: 'Crop Eater', emoji: '🐛', basePercent: 1.20 }
+    ];
+
     const produceList = [
+      { id: 'none',         label: 'None',          emoji: '⛔', basePrice: 0,         baseWeight: 0,     maxWeight: 0,      seedPrice: 0 },
       { id: 'carrot',       label: 'Carrot',        emoji: '🥕', basePrice: 18,       baseWeight: 0.100, maxWeight: 0.300, seedPrice: 10 },
       { id: 'strawberry',   label: 'Strawberry',    emoji: '🍓', basePrice: 14,       baseWeight: 0.050, maxWeight: 0.100, seedPrice: 50 },
       { id: 'aloe',         label: 'Aloe',          emoji: '🪴', basePrice: 310,      baseWeight: 1.5,   maxWeight: 3.8,   seedPrice: 135 },
@@ -508,7 +673,7 @@
     }
 
     function MutationCalculator() {
-      const [selectedCrop, setSelectedCrop] = React.useState(produceList[0].id);
+      const [selectedCrop, setSelectedCrop] = React.useState('none');
       const [size, setSize] = React.useState(50);
       const [selectedMutations, setSelectedMutations] = React.useState([]);
       const [customPrice, setCustomPrice] = React.useState(100000);
@@ -516,6 +681,18 @@
       const [customMaxWeight, setCustomMaxWeight] = React.useState(20);
       const [playersCount, setPlayersCount] = React.useState(1);
       const [showSeedProfits, setShowSeedProfits] = React.useState(false);
+      const [petAbility1, setPetAbility1] = React.useState('none');
+      const [petAbility2, setPetAbility2] = React.useState('none');
+      const [petAbility3, setPetAbility3] = React.useState('none');
+      const [petStrength1, setPetStrength1] = React.useState(50);
+      const [petStrength2, setPetStrength2] = React.useState(50);
+      const [petStrength3, setPetStrength3] = React.useState(50);
+      const [cart, setCart] = React.useState([]);
+      const [addCropId, setAddCropId] = React.useState('none');
+      const [addCropQty, setAddCropQty] = React.useState(1);
+      const maxCartItems = 5;
+      const [cropDdOpen, setCropDdOpen] = React.useState(false);
+      const cropDdRef = React.useRef(null);
 
       React.useEffect(() => {
         const s = parseState();
@@ -538,8 +715,75 @@
 
       React.useEffect(() => {
         const crop = produceList.find(p => p.id === selectedCrop);
-        if (crop && crop.id !== 'custom') setSize(50);
+        if (crop && crop.id !== 'custom' && crop.id !== 'none') setSize(50);
       }, [selectedCrop]);
+
+      // Disable Crop Eater when any mutations are selected; clear incompatible selections
+      React.useEffect(() => {
+        if (selectedMutations.length > 0) {
+          setPetAbility1(a => a === 'crop_eater' ? 'none' : a);
+          setPetAbility2(a => a === 'crop_eater' ? 'none' : a);
+          setPetAbility3(a => a === 'crop_eater' ? 'none' : a);
+        }
+      }, [selectedMutations]);
+
+      // If any pet uses Crop Eater, disable all mutation buttons and clear them
+      const anyCropEater = petAbility1 === 'crop_eater' || petAbility2 === 'crop_eater' || petAbility3 === 'crop_eater';
+      React.useEffect(() => {
+        if (anyCropEater && selectedMutations.length > 0) {
+          setSelectedMutations([]);
+        }
+      }, [anyCropEater]);
+
+      // Close dropdown on outside click
+      React.useEffect(() => {
+        function onDocClick(e) {
+          if (!cropDdRef.current) return;
+          if (!cropDdRef.current.contains(e.target)) setCropDdOpen(false);
+        }
+        document.addEventListener('click', onDocClick);
+        return () => document.removeEventListener('click', onDocClick);
+      }, []);
+
+      // Ensure only one Crop Eater and one Double Harvest across all pets
+      React.useEffect(() => {
+        const isCE1 = petAbility1 === 'crop_eater';
+        const isCE2 = petAbility2 === 'crop_eater';
+        const isCE3 = petAbility3 === 'crop_eater';
+        const count = [isCE1, isCE2, isCE3].filter(Boolean).length;
+        if (count > 1) {
+          if (isCE1) {
+            if (isCE2) setPetAbility2('none');
+            if (isCE3) setPetAbility3('none');
+          } else if (isCE2) {
+            if (isCE3) setPetAbility3('none');
+          }
+        }
+
+        const isDH1 = petAbility1 === 'double_harvest';
+        const isDH2 = petAbility2 === 'double_harvest';
+        const isDH3 = petAbility3 === 'double_harvest';
+        const dhCount = [isDH1, isDH2, isDH3].filter(Boolean).length;
+        if (dhCount > 1) {
+          if (isDH1) {
+            if (isDH2) setPetAbility2('none');
+            if (isDH3) setPetAbility3('none');
+          } else if (isDH2) {
+            if (isDH3) setPetAbility3('none');
+          }
+        }
+
+        // Make DH and CE mutually exclusive: if one is selected anywhere, clear the other elsewhere
+        const anyCE = isCE1 || isCE2 || isCE3;
+        const anyDH = isDH1 || isDH2 || isDH3;
+        if (anyCE && anyDH) {
+          // Prefer the most recently changed? We can't detect order here, so keep first DH and clear others if CE present, else keep first CE
+          // Simplest deterministic rule: if CE exists, clear all DHs except when CE was just cleared. We'll prefer CE dominance.
+          if (isDH1) setPetAbility1('none');
+          if (isDH2) setPetAbility2('none');
+          if (isDH3) setPetAbility3('none');
+        }
+      }, [petAbility1, petAbility2, petAbility3]);
 
       function toggleMutation(id) {
         const isSelected = selectedMutations.includes(id);
@@ -587,7 +831,56 @@
       if (currentWeight < baseWt) currentWeight = baseWt;
       if (currentWeight > maxWt) currentWeight = maxWt;
       const scale = baseWt > 0 ? currentWeight / baseWt : 0;
-      const coins = computeCoins(scale, basePriceV);
+      const coinsBase = computeCoins(scale, basePriceV);
+
+      // Apply pet abilities (ignore probabilities; apply end result)
+      const pets = [
+        { ability: petAbility1, strength: petStrength1 },
+        { ability: petAbility2, strength: petStrength2 },
+        { ability: petAbility3, strength: petStrength3 },
+      ];
+      let sellMultiplier = 1;
+      let doubleMultiplier = 1; // no global doubler
+      for (const {ability, strength} of pets) {
+        const strengthFactor = strength / 100;
+        if (ability === 'sell_boost_1' || ability === 'sell_boost_2' || ability === 'sell_boost_3') {
+          const a = petAbilities.find(x => x.id === ability);
+          const bonus = (a?.basePercent || 0) * strengthFactor;
+          sellMultiplier *= (1 + bonus);
+        } else if (ability === 'crop_eater' && selectedMutations.length === 0) {
+          const a = petAbilities.find(x => x.id === 'crop_eater');
+          const bonus = (a?.basePercent || 0) * strengthFactor;
+          sellMultiplier *= (1 + bonus);
+        }
+      }
+      // If cart has items, compute totals across items; otherwise, single selected crop
+      function unitCoinsForCrop(c) {
+        if (!c) return 0;
+        const basePriceUnit = c.basePrice;
+        const baseW = c.baseWeight;
+        const maxW = c.maxWeight;
+        let cw = baseW + (maxW - baseW) * ((clampedSize - 50) / 50);
+        if (cw < baseW) cw = baseW;
+        if (cw > maxW) cw = maxW;
+        const sc = baseW > 0 ? cw / baseW : 0;
+        const baseCoins = computeCoins(sc, basePriceUnit);
+        return Math.round(baseCoins * sellMultiplier * doubleMultiplier);
+      }
+
+      let totalCoins = 0;
+      let totalSeedCost = 0;
+      if (cart.length > 0) {
+        for (const item of cart) {
+          const itemCrop = produceList.find(p => p.id === item.id);
+          const qty = Math.max(1, Math.min(50, Number(item.qty) || 1));
+          totalCoins += unitCoinsForCrop(itemCrop) * qty;
+          totalSeedCost += (itemCrop?.seedPrice || 0) * qty;
+        }
+      } else {
+        totalCoins = Math.round(coinsBase * sellMultiplier * doubleMultiplier);
+        totalSeedCost = (crop && crop.id !== 'custom' && crop.id !== 'none') ? crop.seedPrice : 0;
+      }
+      let coins = totalCoins;
 
       let roundedWeight;
       if (currentWeight >= 10) {
@@ -598,14 +891,13 @@
         roundedWeight = Math.round(currentWeight * 100) / 100;
       }
       const friendMultiplier = 1 + 0.1 * (Math.max(1, playersCount) - 1);
-      const coinsWithFriendBonus = Math.round(coins * friendMultiplier);
+      const coinsWithFriendBonus = Math.round(totalCoins * friendMultiplier);
 
       // Calculate seed profits
-      const seedPrice = crop ? (crop.id === 'custom' ? 0 : crop.seedPrice) : 0;
-      const profit = coins - seedPrice;
-      const profitWithFriendBonus = coinsWithFriendBonus - seedPrice;
+      const profit = totalCoins - totalSeedCost;
+      const profitWithFriendBonus = coinsWithFriendBonus - totalSeedCost;
 
-      const animatedCoins = useAnimatedNumber(coins);
+      const animatedCoins = useAnimatedNumber(totalCoins);
       const animatedFriendCoins = useAnimatedNumber(coinsWithFriendBonus);
       const animatedProfit = useAnimatedNumber(profit);
       const animatedProfitWithBonus = useAnimatedNumber(profitWithFriendBonus);
@@ -647,9 +939,7 @@
 
       React.useEffect(() => {
         const resetBtn = document.getElementById('reset-btn');
-        const randomBtn = document.getElementById('randomize-btn');
         resetBtn.onclick = resetAll;
-        randomBtn.onclick = randomize;
         const copyBtn = document.getElementById('copy-link');
         copyBtn.onclick = async () => {
           try {
@@ -660,46 +950,30 @@
             alert('Copy failed. You can manually copy the URL.');
           }
         };
+        // mirror hero players select to app state
+        const heroPlayers = document.getElementById('players-select-hero');
+        if (heroPlayers && heroPlayers.children.length === 0) {
+          friendOptions.forEach(n => {
+            const opt = document.createElement('option');
+            opt.value = String(n);
+            opt.textContent = `${n} player${n > 1 ? 's' : ''}`;
+            heroPlayers.appendChild(opt);
+          });
+        }
+        if (heroPlayers) {
+          heroPlayers.value = String(playersCount);
+          heroPlayers.onchange = (e) => setPlayersCount(Number(e.target.value));
+        }
       }, []);
 
       const globalMutations = mutationList.filter(m => m.dominant);
       const weatherMutations = mutationList.filter(m => ['wet', 'chilled', 'frozen'].includes(m.id));
       const harvestMutations = mutationList.filter(m => ['dawnlit', 'ambershine'].includes(m.id));
+      const mutationButtonsDisabled = anyCropEater;
 
       return (
         <div className="grid" role="region" aria-label="Calculator">
-          <div className="grid two">
-            <div>
-              <label htmlFor="crop-select" title="Choose your crop">Crop</label>
-              <select
-                id="crop-select"
-                value={selectedCrop}
-                onChange={e => setSelectedCrop(e.target.value)}
-                aria-label="Select crop"
-              >
-                {produceList.map(crop => (
-                  <option key={crop.id} value={crop.id}>
-                    {crop.emoji} {crop.label} {crop.id !== 'custom' ? `($${crop.seedPrice.toLocaleString()})` : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="players-select" title="1 to 6 players">Players</label>
-              <select
-                id="players-select"
-                value={playersCount}
-                onChange={e => setPlayersCount(Number(e.target.value))}
-                aria-label="Select number of players"
-              >
-                {friendOptions.map(n => (
-                  <option key={n} value={n}>
-                    {n} player{n > 1 ? 's' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <div style={{marginTop:'-0.25rem'}}></div>
 
           <div className="profit-toggle-container">
             <label className="toggle-label">
@@ -712,6 +986,57 @@
               <span className="toggle-slider"></span>
               <span className="toggle-text">🌱 Seed to Profits Mode</span>
             </label>
+            </div>
+
+          <div className="controls-row">
+            <div className="players-panel" title="Number of players for friend bonus">
+              <span className="emoji" aria-hidden="true">👥</span>
+              <label htmlFor="players-select" style={{fontWeight:700,color:'var(--muted)'}}>Players</label>
+              <select
+                id="players-select"
+                className="players-select"
+                value={playersCount}
+                onChange={e => setPlayersCount(Number(e.target.value))}
+                aria-label="Select number of players"
+              >
+                {friendOptions.map(n => (
+                  <option key={n} value={n}>
+                    {n} player{n > 1 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button className="btn warn" id="reset-btn" title="Reset all inputs">↺ Reset</button>
+          </div>
+
+          <div className="cart-panel">
+            <div className="cart-title">🧺 Add Crops</div>
+            <div className="cart-add">
+              <select value={addCropId} onChange={e => setAddCropId(e.target.value)} aria-label="Select crop to add">
+                <option value="none">Select crop</option>
+                {produceList.filter(p => !['none','custom'].includes(p.id) && !cart.some(x => x.id === p.id)).map(p => (
+                  <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>
+                ))}
+              </select>
+              <input className="qty" type="number" min="1" max="50" value={addCropQty} onChange={e => setAddCropQty(e.target.value)} />
+              <button className="btn success" onClick={() => { if (cart.length < maxCartItems) { const q = Math.max(1, Math.min(50, Number(addCropQty)||1)); if (addCropId !== 'none' && addCropId !== 'custom') setCart(prev => [...prev, { id: addCropId, qty: q }]); setAddCropId('none'); setAddCropQty(1);} }} disabled={cart.length >= maxCartItems || addCropId === 'none'}>
+                ➕ Add
+              </button>
+            </div>
+            {cart.length > 0 && (
+              <div className="cart">
+                {cart.map(item => {
+                  const c = produceList.find(p => p.id === item.id);
+                  return (
+                    <div className="cart-item" key={item.id}>
+                      <div className="cart-label"><span className="dd-emoji" aria-hidden="true">{c?.emoji}</span>{c?.label}</div>
+                      <input className="qty" type="number" min="1" max="50" value={item.qty} onChange={e => setCart(prev => prev.map(x => x.id === item.id ? { ...x, qty: Math.max(1, Math.min(50, Number(e.target.value)||1)) } : x))} />
+                      <button className="remove-btn" onClick={() => setCart(prev => prev.filter(x => x.id !== item.id))}>✖</button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {selectedCrop === 'custom' && (
@@ -751,6 +1076,73 @@
             </div>
           </div>
 
+          <div className="pet-section">
+            <h4>🐾 Pet Abilities</h4>
+            <div className="grid three">
+              <div>
+                <label htmlFor="pet1-select" title="Choose pet 1 ability">Pet 1</label>
+                <select id="pet1-select" value={petAbility1} onChange={e => setPetAbility1(e.target.value)} aria-label="Select pet 1 ability">
+                  {petAbilities.map(ability => (
+                    <option key={ability.id} value={ability.id} disabled={(ability.id === 'crop_eater' && (selectedMutations.length > 0 || petAbility2 === 'crop_eater' || petAbility3 === 'crop_eater' || petAbility2 === 'double_harvest' || petAbility3 === 'double_harvest')) || (ability.id === 'double_harvest' && (petAbility2 === 'double_harvest' || petAbility3 === 'double_harvest' || petAbility2 === 'crop_eater' || petAbility3 === 'crop_eater'))}>
+                      {ability.emoji} {ability.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="pet2-select" title="Choose pet 2 ability">Pet 2</label>
+                <select id="pet2-select" value={petAbility2} onChange={e => setPetAbility2(e.target.value)} aria-label="Select pet 2 ability">
+                  {petAbilities.map(ability => (
+                    <option key={ability.id} value={ability.id} disabled={(ability.id === 'crop_eater' && (selectedMutations.length > 0 || petAbility1 === 'crop_eater' || petAbility3 === 'crop_eater' || petAbility1 === 'double_harvest' || petAbility3 === 'double_harvest')) || (ability.id === 'double_harvest' && (petAbility1 === 'double_harvest' || petAbility3 === 'double_harvest' || petAbility1 === 'crop_eater' || petAbility3 === 'crop_eater'))}>
+                      {ability.emoji} {ability.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="pet3-select" title="Choose pet 3 ability">Pet 3</label>
+                <select id="pet3-select" value={petAbility3} onChange={e => setPetAbility3(e.target.value)} aria-label="Select pet 3 ability">
+                  {petAbilities.map(ability => (
+                    <option key={ability.id} value={ability.id} disabled={(ability.id === 'crop_eater' && (selectedMutations.length > 0 || petAbility1 === 'crop_eater' || petAbility2 === 'crop_eater' || petAbility1 === 'double_harvest' || petAbility2 === 'double_harvest')) || (ability.id === 'double_harvest' && (petAbility1 === 'double_harvest' || petAbility2 === 'double_harvest' || petAbility1 === 'crop_eater' || petAbility2 === 'crop_eater'))}>
+                      {ability.emoji} {ability.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="grid three">
+              <div>
+                <label htmlFor="pet1-strength">Strength</label>
+                <div className="size-row">
+                  <input id="pet1-strength" type="range" className={"slider" + (!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility1)) ? " disabled" : "")} min="50" max="100" step="1" value={petStrength1} onChange={e => setPetStrength1(Number(e.target.value))} aria-valuemin={50} aria-valuemax={100} aria-valuenow={petStrength1} disabled={!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility1))} />
+                  <div className="size-badge" aria-live="polite">{petStrength1}</div>
+                </div>
+              </div>
+              <div>
+                <label htmlFor="pet2-strength">Strength</label>
+                <div className="size-row">
+                  <input id="pet2-strength" type="range" className={"slider" + (!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility2)) ? " disabled" : "")} min="50" max="100" step="1" value={petStrength2} onChange={e => setPetStrength2(Number(e.target.value))} aria-valuemin={50} aria-valuemax={100} aria-valuenow={petStrength2} disabled={!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility2))} />
+                  <div className="size-badge" aria-live="polite">{petStrength2}</div>
+                </div>
+              </div>
+              <div>
+                <label htmlFor="pet3-strength">Strength</label>
+                <div className="size-row">
+                  <input id="pet3-strength" type="range" className={"slider" + (!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility3)) ? " disabled" : "")} min="50" max="100" step="1" value={petStrength3} onChange={e => setPetStrength3(Number(e.target.value))} aria-valuemin={50} aria-valuemax={100} aria-valuenow={petStrength3} disabled={!(['sell_boost_1','sell_boost_2','sell_boost_3','crop_eater'].includes(petAbility3))} />
+                  <div className="size-badge" aria-live="polite">{petStrength3}</div>
+                </div>
+              </div>
+            </div>
+            {selectedMutations.length > 0 && ([petAbility1, petAbility2, petAbility3].includes('crop_eater')) && (
+              <div className="crop-eater-disabled">🐛 Crop Eater disabled with mutations</div>
+            )}
+            {([petAbility1, petAbility2, petAbility3].some(a => a !== 'none')) && (
+              <div className="pet-bonus-info">
+                <small>Pet bonuses applied</small>
+              </div>
+            )}
+          </div>
+
           <div className="stats" role="region" aria-label="Crop Stats">
             <div className="stat">
               <small>Base weight</small>
@@ -760,12 +1152,13 @@
               <small>Current → Max</small>
               <div className="value">{currentWeight.toFixed(2)} → {maxWt} kg</div>
             </div>
-            {selectedCrop !== 'custom' && (
-              <div className="stat seed-price-stat">
-                <small>🌱 Seed price</small>
-                <div className="value">${seedPrice.toLocaleString()}</div>
-              </div>
-            )}
+            <div className="stat seed-price-stat">
+              <small>🌱 {cart.length > 0 ? 'Seed cost' : 'Seed price'}</small>
+              <div className="value">${(cart.length > 0
+                ? totalSeedCost
+                : ((crop && crop.id !== 'custom' && crop.id !== 'none') ? crop.seedPrice : 0)
+              ).toLocaleString()}</div>
+            </div>
           </div>
 
           <div className="mut-cards" role="region" aria-label="Mutations">
@@ -777,8 +1170,8 @@
                   return (
                     <button
                       key={mut.id}
-                      className={"pill" + (isChecked ? " active" : "")}
-                      onClick={() => toggleMutation(mut.id)}
+                      className={"pill" + (isChecked ? " active" : "") + (mutationButtonsDisabled ? " disabled" : "")}
+                      onClick={() => !mutationButtonsDisabled && toggleMutation(mut.id)}
                       aria-pressed={isChecked}
                       title={`${mut.emoji} ${mut.label} (×${mut.value})`}
                     >
@@ -798,8 +1191,8 @@
                   return (
                     <button
                       key={mut.id}
-                      className={"pill" + (isChecked ? " active" : "")}
-                      onClick={() => toggleMutation(mut.id)}
+                      className={"pill" + (isChecked ? " active" : "") + (mutationButtonsDisabled ? " disabled" : "")}
+                      onClick={() => !mutationButtonsDisabled && toggleMutation(mut.id)}
                       aria-pressed={isChecked}
                       title={`${mut.emoji} ${mut.label} (×${mut.value})`}
                     >
@@ -819,8 +1212,8 @@
                   return (
                     <button
                       key={mut.id}
-                      className={"pill" + (isChecked ? " active" : "")}
-                      onClick={() => toggleMutation(mut.id)}
+                      className={"pill" + (isChecked ? " active" : "") + (mutationButtonsDisabled ? " disabled" : "")}
+                      onClick={() => !mutationButtonsDisabled && toggleMutation(mut.id)}
                       aria-pressed={isChecked}
                       title={`${mut.emoji} ${mut.label} (×${mut.value})`}
                     >
@@ -836,20 +1229,20 @@
 
           <div>
             {showSeedProfits ? (
-              <div>
-                <div className="result" aria-live="polite">
+          <div>
+            <div className="result" aria-live="polite">
                   <span className={profit < 0 ? 'profit-negative' : 'profit-positive'}>
                     Profit from seed: {profit < 0 ? '-' : ''}${Math.abs(animatedProfit).toLocaleString()}
                   </span>
-                </div>
-                {playersCount > 1 && (
-                  <div className="friend-result">
+            </div>
+            {playersCount > 1 && (
+              <div className="friend-result">
                     <span className={profitWithFriendBonus < 0 ? 'profit-negative' : 'profit-positive'}>
                       With friend bonus: {profitWithFriendBonus < 0 ? '-' : ''}${Math.abs(animatedProfitWithBonus).toLocaleString()}
                     </span>
-                  </div>
-                )}
               </div>
+            )}
+            </div>
             ) : (
               <div>
                 <div className="result" aria-live="polite">
@@ -862,12 +1255,7 @@
                 )}
               </div>
             )}
-            <div
-              className="gauge"
-              style={{ '--progress': `${(clampedSize - 50) * 2}%` }}
-            >
-              <div className="gauge-text">{clampedSize}</div>
-            </div>
+            
           </div>
         </div>
       );
