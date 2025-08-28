@@ -184,110 +184,7 @@
     .pill input { pointer-events: none; }
     .pill .emoji { font-size: 1rem; }
 
-    /* Seed to Profits Toggle Styles */
-    .profit-toggle-container {
-      display: flex;
-      justify-content: center;
-      margin: 1rem 0;
-      padding: 0.75rem;
-      background: linear-gradient(180deg, rgba(96,165,250,0.08), rgba(96,165,250,0.03));
-      border: 1px solid rgba(96,165,250,0.2);
-      border-radius: 16px;
-    }
-
-    .toggle-label {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      cursor: pointer;
-      user-select: none;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.2s ease;
-    }
-
-    .toggle-label:hover {
-      transform: translateY(-1px);
-    }
-
-    .profit-toggle {
-      display: none;
-    }
-
-    .toggle-slider {
-      position: relative;
-      width: 50px;
-      height: 24px;
-      background: var(--muted);
-      border-radius: 12px;
-      transition: background-color 0.3s ease;
-    }
-
-    .toggle-slider::before {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .profit-toggle:checked + .toggle-slider {
-      background: linear-gradient(90deg, var(--brand), var(--brand-2));
-    }
-
-    .profit-toggle:checked + .toggle-slider::before {
-      transform: translateX(26px);
-      box-shadow: 0 2px 8px rgba(96,165,250,0.4);
-    }
-
-    .toggle-text {
-      font-size: 0.95rem;
-      color: var(--brand);
-      transition: color 0.2s ease;
-    }
-
-    .profit-toggle:checked ~ .toggle-text {
-      color: var(--accent);
-    }
-
-    /* Profit Display Styles */
-    .profit-positive {
-      color: var(--accent);
-      font-weight: 800;
-    }
-
-    .profit-negative {
-      color: var(--danger);
-      font-weight: 800;
-    }
-
-    .seed-cost-info {
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-
-    .seed-price-stat {
-      background: linear-gradient(180deg, rgba(52,211,153,0.08), rgba(52,211,153,0.03)) !important;
-      border: 1px solid rgba(52,211,153,0.2) !important;
-    }
-
-    .seed-price-stat small {
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .seed-price-stat .value {
-      color: var(--accent);
-      font-weight: 800;
-    }
-
-    .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
-    @media (max-width: 980px) { .stats { grid-template-columns: 1fr 1fr; } }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     @media (max-width: 680px) { .stats { grid-template-columns: 1fr; } }
     .stat { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); padding: 0.75rem; border: 1px solid var(--border); border-radius: 14px; }
     .stat small { color: var(--muted); font-weight: 700; }
@@ -425,34 +322,34 @@
     const friendOptions = [1, 2, 3, 4, 5, 6];
 
     const produceList = [
-      { id: 'carrot',       label: 'Carrot',        emoji: '🥕', basePrice: 18,       baseWeight: 0.100, maxWeight: 0.300, seedPrice: 10 },
-      { id: 'strawberry',   label: 'Strawberry',    emoji: '🍓', basePrice: 14,       baseWeight: 0.050, maxWeight: 0.100, seedPrice: 50 },
-      { id: 'aloe',         label: 'Aloe',          emoji: '🪴', basePrice: 310,      baseWeight: 1.5,   maxWeight: 3.8,   seedPrice: 135 },
-      { id: 'blueberry',    label: 'Blueberry',     emoji: '🫐', basePrice: 23,       baseWeight: 0.010, maxWeight: 0.020, seedPrice: 400 },
-      { id: 'apple',        label: 'Apple',         emoji: '🍎', basePrice: 73,       baseWeight: 0.180, maxWeight: 0.360, seedPrice: 500 },
-      { id: 'tulip',        label: 'Tulip',         emoji: '🌷', basePrice: 767,      baseWeight: 0.010, maxWeight: 0.030, seedPrice: 600 },
-      { id: 'tomato',       label: 'Tomato',        emoji: '🍅', basePrice: 27,       baseWeight: 0.300, maxWeight: 0.600, seedPrice: 800 },
-      { id: 'daffodil',     label: 'Daffodil',      emoji: '🌼', basePrice: 1090,     baseWeight: 0.010, maxWeight: 0.030, seedPrice: 1000 },
-      { id: 'corn',         label: 'Corn',          emoji: '🌽', basePrice: 36,       baseWeight: 1.20,  maxWeight: 2.40,  seedPrice: 1300 },
-      { id: 'watermelon',   label: 'Watermelon',    emoji: '🍉', basePrice: 2708,     baseWeight: 4.50,  maxWeight: 13.50, seedPrice: 2500 },
-      { id: 'pumpkin',      label: 'Pumpkin',       emoji: '🎃', basePrice: 3700,     baseWeight: 6.00,  maxWeight: 18.00, seedPrice: 3000 },
-      { id: 'echeveria',    label: 'Echeveria',     emoji: '🌿', basePrice: 5520,     baseWeight: 0.80,  maxWeight: 2.20,  seedPrice: 4200 },
-      { id: 'coconut',      label: 'Coconut',       emoji: '🥥', basePrice: 302,      baseWeight: 5.00,  maxWeight: 15.00, seedPrice: 6000 },
-      { id: 'banana',       label: 'Banana',        emoji: '🍌', basePrice: 1750,     baseWeight: 0.120, maxWeight: 0.204, seedPrice: 7500 },
-      { id: 'lily',         label: 'Lily',          emoji: '🌸', basePrice: 20123,    baseWeight: 0.0200, maxWeight: 0.0550, seedPrice: 20000 },
-      { id: 'burro',        label: "Burro's Tail", emoji: '🌵', basePrice: 6000,     baseWeight: 0.40,  maxWeight: 1.0,   seedPrice: 93000 },
-      { id: 'mushroom',     label: 'Mushroom',      emoji: '🍄', basePrice: 160000,   baseWeight: 25.00, maxWeight: 87.50, seedPrice: 150000 },
-      { id: 'cactus',       label: 'Cactus',        emoji: '🌵', basePrice: 287000,   baseWeight: 1500,  maxWeight: 2700,  seedPrice: 250000 },
-      { id: 'bamboo',       label: 'Bamboo',        emoji: '🎍', basePrice: 500000,   baseWeight: 1.00,  maxWeight: 2.00,  seedPrice: 400000 },
-      { id: 'grape',        label: 'Grape',         emoji: '🍇', basePrice: 7085,     baseWeight: 3.00,  maxWeight: 6.00,  seedPrice: 850000 },
-      { id: 'pepper',       label: 'Pepper',        emoji: '🌶️', basePrice: 7220,     baseWeight: 0.500, maxWeight: 1.000, seedPrice: 1000000 },
-      { id: 'lemon',        label: 'Lemon',         emoji: '🍋', basePrice: 10000,    baseWeight: 0.500, maxWeight: 1.500, seedPrice: 2000000 },
-      { id: 'passionfruit', label: 'Passion Fruit', emoji: '🥭', basePrice: 24500,    baseWeight: 9.50,  maxWeight: 19.00, seedPrice: 2750000 },
-      { id: 'dragonfruit',  label: 'Dragon Fruit',  emoji: '🐉', basePrice: 24500,    baseWeight: 8.40,  maxWeight: 16.80, seedPrice: 5000000 },
-      { id: 'lychee',       label: 'Lychee',        emoji: '🍒', basePrice: 50000,    baseWeight: 9.00,  maxWeight: 18.00, seedPrice: 25000000 },
-      { id: 'sunflower',    label: 'Sunflower',     emoji: '🌻', basePrice: 750000,   baseWeight: 10.00, maxWeight: 25.00, seedPrice: 100000000 },
-      { id: 'starweaver',   label: 'Starweaver',    emoji: '⭐️', basePrice: 10000000, baseWeight: 10.00, maxWeight: 20.00, seedPrice: 1000000000 },
-      { id: 'custom',       label: 'Custom',        emoji: '✨', basePrice: 0,        baseWeight: 10,    maxWeight: 20,     seedPrice: 0 }
+      { id: 'carrot',       label: 'Carrot',        emoji: '🥕', basePrice: 18,       baseWeight: 0.100, maxWeight: 0.300 },
+      { id: 'strawberry',   label: 'Strawberry',    emoji: '🍓', basePrice: 14,       baseWeight: 0.050, maxWeight: 0.100 },
+      { id: 'aloe',         label: 'Aloe',          emoji: '🪴', basePrice: 310,      baseWeight: 1.5,   maxWeight: 3.8   },
+      { id: 'blueberry',    label: 'Blueberry',     emoji: '🫐', basePrice: 23,       baseWeight: 0.010, maxWeight: 0.020 },
+      { id: 'apple',        label: 'Apple',         emoji: '🍎', basePrice: 73,       baseWeight: 0.180, maxWeight: 0.360 },
+      { id: 'tulip',        label: 'Tulip',         emoji: '🌷', basePrice: 767,      baseWeight: 0.010, maxWeight: 0.030 },
+      { id: 'tomato',       label: 'Tomato',        emoji: '🍅', basePrice: 27,       baseWeight: 0.300, maxWeight: 0.600 },
+      { id: 'daffodil',     label: 'Daffodil',      emoji: '🌼', basePrice: 1090,     baseWeight: 0.010, maxWeight: 0.030 },
+      { id: 'corn',         label: 'Corn',          emoji: '🌽', basePrice: 36,       baseWeight: 1.20,  maxWeight: 2.40  },
+      { id: 'watermelon',   label: 'Watermelon',    emoji: '🍉', basePrice: 2708,     baseWeight: 4.50,  maxWeight: 13.50 },
+      { id: 'pumpkin',      label: 'Pumpkin',       emoji: '🎃', basePrice: 3700,     baseWeight: 6.00,  maxWeight: 18.00 },
+      { id: 'echeveria',    label: 'Echeveria',     emoji: '🌿', basePrice: 5520,     baseWeight: 0.80,  maxWeight: 2.20 },
+      { id: 'coconut',      label: 'Coconut',       emoji: '🥥', basePrice: 302,      baseWeight: 5.00,  maxWeight: 15.00 },
+      { id: 'banana',       label: 'Banana',        emoji: '🍌', basePrice: 1750,     baseWeight: 0.120, maxWeight: 0.204 },
+      { id: 'lily',         label: 'Lily',          emoji: '🌸', basePrice: 20123,    baseWeight: 0.0200, maxWeight: 0.0550 },
+      { id: 'burro',        label: "Burro's Tail", emoji: '🌵', basePrice: 6000,     baseWeight: 0.40,  maxWeight: 1.0  },
+      { id: 'mushroom',     label: 'Mushroom',      emoji: '🍄', basePrice: 160000,   baseWeight: 25.00, maxWeight: 87.50 },
+      { id: 'cactus',       label: 'Cactus',        emoji: '🌵', basePrice: 287000,   baseWeight: 1500,  maxWeight: 2700  },
+      { id: 'bamboo',       label: 'Bamboo',        emoji: '🎍', basePrice: 500000,   baseWeight: 1.00,  maxWeight: 2.00 },
+      { id: 'grape',        label: 'Grape',         emoji: '🍇', basePrice: 7085,     baseWeight: 3.00,  maxWeight: 6.00  },
+      { id: 'pepper',       label: 'Pepper',        emoji: '🌶️', basePrice: 7220,     baseWeight: 0.500, maxWeight: 1.000 },
+      { id: 'lemon',        label: 'Lemon',         emoji: '🍋', basePrice: 10000,    baseWeight: 0.500, maxWeight: 1.500 },
+      { id: 'passionfruit', label: 'Passion Fruit', emoji: '🥭', basePrice: 24500,    baseWeight: 9.50,  maxWeight: 19.00 },
+      { id: 'dragonfruit',  label: 'Dragon Fruit',  emoji: '🐉', basePrice: 24500,    baseWeight: 8.40,  maxWeight: 16.80 },
+      { id: 'lychee',       label: 'Lychee',        emoji: '🍒', basePrice: 50000,    baseWeight: 9.00,  maxWeight: 18.00 },
+      { id: 'sunflower',    label: 'Sunflower',     emoji: '🌻', basePrice: 750000,   baseWeight: 10.00, maxWeight: 25.00 },
+      { id: 'starweaver',   label: 'Starweaver',    emoji: '⭐️', basePrice: 10000000, baseWeight: 10.00, maxWeight: 20.00 },
+      { id: 'custom',       label: 'Custom',        emoji: '✨', basePrice: 0,        baseWeight: 10,    maxWeight: 20     }
     ];
 
     function useAnimatedNumber(value) {
@@ -515,7 +412,6 @@
       const [customBaseWeight, setCustomBaseWeight] = React.useState(10);
       const [customMaxWeight, setCustomMaxWeight] = React.useState(20);
       const [playersCount, setPlayersCount] = React.useState(1);
-      const [showSeedProfits, setShowSeedProfits] = React.useState(false);
 
       React.useEffect(() => {
         const s = parseState();
@@ -600,15 +496,8 @@
       const friendMultiplier = 1 + 0.1 * (Math.max(1, playersCount) - 1);
       const coinsWithFriendBonus = Math.round(coins * friendMultiplier);
 
-      // Calculate seed profits
-      const seedPrice = crop ? (crop.id === 'custom' ? 0 : crop.seedPrice) : 0;
-      const profit = coins - seedPrice;
-      const profitWithFriendBonus = coinsWithFriendBonus - seedPrice;
-
       const animatedCoins = useAnimatedNumber(coins);
       const animatedFriendCoins = useAnimatedNumber(coinsWithFriendBonus);
-      const animatedProfit = useAnimatedNumber(profit);
-      const animatedProfitWithBonus = useAnimatedNumber(profitWithFriendBonus);
 
       React.useEffect(() => {
         if (clampedSize === 100 || selectedMutations.includes('gold') || selectedMutations.includes('rainbow')) fireConfetti();
@@ -679,7 +568,7 @@
               >
                 {produceList.map(crop => (
                   <option key={crop.id} value={crop.id}>
-                    {crop.emoji} {crop.label} {crop.id !== 'custom' ? `($${crop.seedPrice.toLocaleString()})` : ''}
+                    {crop.emoji} {crop.label}
                   </option>
                 ))}
               </select>
@@ -699,19 +588,6 @@
                 ))}
               </select>
             </div>
-          </div>
-
-          <div className="profit-toggle-container">
-            <label className="toggle-label">
-              <input
-                type="checkbox"
-                checked={showSeedProfits}
-                onChange={e => setShowSeedProfits(e.target.checked)}
-                className="profit-toggle"
-              />
-              <span className="toggle-slider"></span>
-              <span className="toggle-text">🌱 Seed to Profits Mode</span>
-            </label>
           </div>
 
           {selectedCrop === 'custom' && (
@@ -751,7 +627,7 @@
             </div>
           </div>
 
-          <div className="stats" role="region" aria-label="Crop Stats">
+          <div className="stats" role="region" aria-label="Weights">
             <div className="stat">
               <small>Base weight</small>
               <div className="value">{baseWt} kg</div>
@@ -760,12 +636,6 @@
               <small>Current → Max</small>
               <div className="value">{currentWeight.toFixed(2)} → {maxWt} kg</div>
             </div>
-            {selectedCrop !== 'custom' && (
-              <div className="stat seed-price-stat">
-                <small>🌱 Seed price</small>
-                <div className="value">${seedPrice.toLocaleString()}</div>
-              </div>
-            )}
           </div>
 
           <div className="mut-cards" role="region" aria-label="Mutations">
@@ -835,31 +705,12 @@
           </div>
 
           <div>
-            {showSeedProfits ? (
-              <div>
-                <div className="result" aria-live="polite">
-                  <span className={profit < 0 ? 'profit-negative' : 'profit-positive'}>
-                    Profit from seed: {profit < 0 ? '-' : ''}${Math.abs(animatedProfit).toLocaleString()}
-                  </span>
-                </div>
-                {playersCount > 1 && (
-                  <div className="friend-result">
-                    <span className={profitWithFriendBonus < 0 ? 'profit-negative' : 'profit-positive'}>
-                      With friend bonus: {profitWithFriendBonus < 0 ? '-' : ''}${Math.abs(animatedProfitWithBonus).toLocaleString()}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div>
-                <div className="result" aria-live="polite">
-                  Estimated coins: {animatedCoins.toLocaleString()}
-                </div>
-                {playersCount > 1 && (
-                  <div className="friend-result">
-                    With friend bonus: {animatedFriendCoins.toLocaleString()}
-                  </div>
-                )}
+            <div className="result" aria-live="polite">
+              Estimated coins: {animatedCoins.toLocaleString()}
+            </div>
+            {playersCount > 1 && (
+              <div className="friend-result">
+                With friend bonus: {animatedFriendCoins.toLocaleString()}
               </div>
             )}
             <div
